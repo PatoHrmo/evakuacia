@@ -3,7 +3,6 @@ package ga;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 public class ModelSiete {
 	// pocet vozidiel v zdroji i 
@@ -24,6 +23,8 @@ public class ModelSiete {
 	private int indexiI[];
 	// index komunity j v matici Tij
 	private int indexiJ[];
+	// pocet obyvatelov z j ktorych moze evakuovat vozidlo z j
+	private int Aij[][];
 	@SuppressWarnings("resource")
 	public ModelSiete() {
 		Scanner scPoctyVozidiel;
@@ -57,6 +58,7 @@ public class ModelSiete {
 		indexiI = new int[scIndexI.nextInt()];
 		indexiJ = new int[scIndexJ.nextInt()];
 		Tij = new double[indexiI.length][indexiJ.length];
+		Aij = new int[indexiI.length][indexiJ.length];
 		Ni = new int[scPoctyVozidiel.nextInt()];
 		Ki = new int[scKapacityVozidiel.nextInt()];
 		Bj = new int[scPoctyObyvatelov.nextInt()];
@@ -91,12 +93,25 @@ public class ModelSiete {
 		}
 		// naplnenie matice s casom prepravy zo zdrojov do komunit
 		for(int i = 0; i<indexiI.length;i++) {
-			System.out.println();
 			for(int j = 0;j<indexiJ.length;j++) {
 				Tij[i][j] = pomTij[indexiI[i]-1][indexiJ[j]-1];
 			}
 		}
+	}
+	public void inicializujAij(double Tmax) {
 		
+		for(int i = 0; i<Aij.length;i++) {
+			System.out.println();
+			for(int j = 0; j<Aij[0].length;j++) {
+				Aij[i][j] = Ki[i]*((int)Math.floor((Tmax-Tij[i][j]+Sj[j])/(2*Sj[j])));
+			}
+		}
 		
+	}
+	public int getAij(int i, int j) {
+		return Aij[i][j];
+	}
+	public int[] generujJedinca() {
+		return null;
 	}
 }
