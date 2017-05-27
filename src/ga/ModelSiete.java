@@ -111,7 +111,41 @@ public class ModelSiete {
 	public int getAij(int i, int j) {
 		return Aij[i][j];
 	}
-	public int[] generujJedinca() {
-		return null;
+	public Jedinec generujJedinca() {
+		Jedinec jedinec = new Jedinec(indexiI.length, indexiJ.length);
+		vypocitajPocetNeevakuovanych(jedinec);
+		return jedinec;
+	}
+	public void vypocitajPocetNeevakuovanych(Jedinec jedinec) {
+		int i;
+		int pocetObsluzenychVkomoditeJ[] = new int[indexiJ.length];
+		int poradieSpracovavanejKomunity = 0;
+		int j = jedinec.getZoznamKomunit()[poradieSpracovavanejKomunity];
+		// pre pocet zdrojov
+		for(int pocetZdrojov = 0; pocetZdrojov<indexiI.length;pocetZdrojov++) {
+			// ziskam si z jedinca i-ty zdroj v poradi
+			i = jedinec.getZoznamZdrojov()[pocetZdrojov];
+			// pre kazde auto v tomto zdroji
+			for(int pocetAutVZdroji = 0; pocetAutVZdroji<Ni[i];pocetAutVZdroji++) {
+				// obsluzim tolko zakaznikov s tymto autom, kolko je mozne
+				pocetObsluzenychVkomoditeJ[j] +=getAij(i, j);
+				// ak su obsluzeny vsetci idem obsluovat dalsiu komunitu
+				if(pocetObsluzenychVkomoditeJ[j]>=Bj[j]) {
+					pocetObsluzenychVkomoditeJ[j] = Bj[j];
+					poradieSpracovavanejKomunity++;
+					// vsetky komunity boli obsluzene
+					if(poradieSpracovavanejKomunity==indexiJ.length) {
+						jedinec.setPocetNeevakuovanych(0);
+						return;
+					}
+					j = jedinec.getZoznamKomunit()[poradieSpracovavanejKomunity];
+				}
+			}
+		}
+		int pocetNeobsluzenych = 0;
+		for(j = 0; j<indexiJ.length;j++) {
+			pocetNeobsluzenych+= Bj[j]-pocetObsluzenychVkomoditeJ[j];
+		}
+		jedinec.setPocetNeevakuovanych(pocetNeobsluzenych);
 	}
 }
