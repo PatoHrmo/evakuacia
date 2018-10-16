@@ -1,5 +1,5 @@
 # evakuacia
 metaheuristiky - school project
-[example](output example/1.jpg)
+![example](evakuacia/output example/1.jpg)
 
 
