@@ -1,0 +1,2 @@
+# evakuacia
+metaheuristiky - school project
